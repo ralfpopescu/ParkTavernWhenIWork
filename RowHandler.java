@@ -134,6 +134,7 @@ public class RowHandler {
 
     public void filterRow(XSSFRow row, String job){
         Iterator<Cell> cellIterator = row.cellIterator();
+        boolean first = true;
         while (cellIterator.hasNext())
         {
             Cell cell = cellIterator.next();
@@ -146,6 +147,10 @@ public class RowHandler {
                 case Cell.CELL_TYPE_STRING:
                     String celljob = parser.getJob(cell.getStringCellValue());
                     if(!celljob.equals(job)) {
+                        if(first){
+                            first = false;
+                            break;
+                        }
                         cell.setCellValue("");
                     }
 
@@ -248,6 +253,20 @@ public class RowHandler {
 
 
             return "no match";
+    }
+
+    public ArrayList<ArrayList> getAllFiltered(){
+        ArrayList<ArrayList> all = getAll();
+
+        for(int i = 0; i < all.size(); i++){
+            ArrayList<XSSFRow> job = all.get(i);
+            for(XSSFRow row: job){
+                filterRow(row, getJobFromList(job));
+            }
+        }
+
+        return all;
+
     }
 
 

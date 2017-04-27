@@ -19,9 +19,6 @@ public class ExcelOrganizer
         //MOD, Server, Bartender, Barback, Busser, Host, Food Runner, Parking, Security, Maintenance, Sushi, Kitchen
         //Dishwasher, Banquet Bartender, Banquet Cook, Banquet Server, Banquet Dishwasher, Basecamp, Event Sales, Inventory
 
-        ArrayList<XSSFRow> MOD = new ArrayList<XSSFRow>();
-
-
 
         FileInputStream fis = new FileInputStream(
                 new File("/Users/ralfpopescu/ParkTavernWhenIWork/src/schedule.xlsx"));
@@ -30,28 +27,16 @@ public class ExcelOrganizer
         XSSFSheet spreadsheet = workbook.getSheetAt(0);
 
         Iterator<Row> rowIterator = spreadsheet.iterator();
+        RowHandler rowHandler = new RowHandler();
+        SheetCreator sheetCreator = new SheetCreator(rowHandler);
 
         while (rowIterator.hasNext())
         {
             row = (XSSFRow) rowIterator.next();
-            Iterator<Cell> cellIterator = row.cellIterator();
-            while (cellIterator.hasNext())
-            {
-                Cell cell = cellIterator.next();
-                switch (cell.getCellType())
-                {
-                    case Cell.CELL_TYPE_NUMERIC:
-                        System.out.print(
-                                cell.getNumericCellValue() + " \t\t " );
-                        break;
-                    case Cell.CELL_TYPE_STRING:
-                        System.out.print(
-                                cell.getStringCellValue() + " \t\t " );
-                        break;
-                }
-            }
+            rowHandler.determineJobs(row);
             System.out.println("YO");
         }
+        sheetCreator.makeSheet();
         fis.close();
     }
 }
