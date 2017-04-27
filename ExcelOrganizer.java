@@ -9,14 +9,22 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import java.util.ArrayList;
 
 public class ExcelOrganizer
 {
     static XSSFRow row;
     public static void main(String[] args) throws Exception
     {
+        //MOD, Server, Bartender, Barback, Busser, Host, Food Runner, Parking, Security, Maintenance, Sushi, Kitchen
+        //Dishwasher, Banquet Bartender, Banquet Cook, Banquet Server, Banquet Dishwasher, Basecamp, Event Sales, Inventory
+
+        ArrayList<XSSFRow> MOD = new ArrayList<XSSFRow>();
+
+
+
         FileInputStream fis = new FileInputStream(
-                new File("/Users/ralfpopescu/ParkTavernWhenIWork/src/CDC-1.xlsx"));
+                new File("/Users/ralfpopescu/ParkTavernWhenIWork/src/schedule.xlsx"));
 
         XSSFWorkbook workbook = new XSSFWorkbook(fis);
         XSSFSheet spreadsheet = workbook.getSheetAt(0);
@@ -42,7 +50,7 @@ public class ExcelOrganizer
                         break;
                 }
             }
-            System.out.println();
+            System.out.println("YO");
         }
         fis.close();
     }
