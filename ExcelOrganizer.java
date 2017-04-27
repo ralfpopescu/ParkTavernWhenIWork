@@ -34,7 +34,6 @@ public class ExcelOrganizer
         {
             row = (XSSFRow) rowIterator.next();
             rowHandler.determineJobs(row);
-            System.out.println("YO");
         }
         sheetCreator.makeSheet();
         fis.close();

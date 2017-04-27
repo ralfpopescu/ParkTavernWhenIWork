@@ -50,8 +50,7 @@ public class RowHandler {
             switch (cell.getCellType())
             {
                 case Cell.CELL_TYPE_NUMERIC:
-                    System.out.print(
-                            cell.getNumericCellValue() + " \t\t " );
+
                     break;
                 case Cell.CELL_TYPE_STRING:
                     String job = parser.getJob(cell.getStringCellValue());
@@ -132,7 +131,8 @@ public class RowHandler {
 
     }
 
-    public void filterRow(XSSFRow row, String job){
+    public XSSFRow filterRow(XSSFRow row, String job){
+
         Iterator<Cell> cellIterator = row.cellIterator();
         boolean first = true;
         while (cellIterator.hasNext())
@@ -141,22 +141,28 @@ public class RowHandler {
             switch (cell.getCellType())
             {
                 case Cell.CELL_TYPE_NUMERIC:
-                    System.out.print(
-                            cell.getNumericCellValue() + " \t\t " );
+
                     break;
                 case Cell.CELL_TYPE_STRING:
                     String celljob = parser.getJob(cell.getStringCellValue());
+                    //System.out.println(job + " " + celljob);
+                    if(celljob.equals("n")){
+                        break;
+                    }
                     if(!celljob.equals(job)) {
+                        System.out.println(job + " " + celljob);
+                        System.out.println("NOMATCH");
                         if(first){
                             first = false;
-                            break;
+                        } else {
+                            cell.setCellValue("AY");
                         }
-                        cell.setCellValue("");
                     }
 
                     break;
             }
         }
+        return row;
     }
 
     public ArrayList<ArrayList> getAll(){
@@ -257,15 +263,19 @@ public class RowHandler {
 
     public ArrayList<ArrayList> getAllFiltered(){
         ArrayList<ArrayList> all = getAll();
+        ArrayList<ArrayList> newAll = new ArrayList<ArrayList>();
 
         for(int i = 0; i < all.size(); i++){
             ArrayList<XSSFRow> job = all.get(i);
-            for(XSSFRow row: job){
-                filterRow(row, getJobFromList(job));
+            for(int j = 0; j < job.size(); j++) {
+                XSSFRow filteredRow = filterRow(job.get(j), getJobFromList(job));
+                job.remove(j);
+                job.add(j,filteredRow);
             }
+            newAll.add(job);
         }
 
-        return all;
+        return newAll;
 
     }
 

@@ -26,10 +26,15 @@ public class Parser {
             return "MOD";
         }
         if(cell.contains("Server")){
-            return "Server";
+            if(!cell.contains("Banquet")){
+                return "Server";
+            }
+
         }
         if(cell.contains("Bartender")){
-            return "Bartender";
+            if(!cell.contains("Banquet")){
+                return "Bartender";
+            }
         }
         if(cell.contains("Barback")){
             return "Barback";
@@ -59,7 +64,9 @@ public class Parser {
             return "Kitchen";
         }
         if(cell.contains("Dishwasher")){
-            return "Dishwasher";
+            if(!cell.contains("Banquet")){
+                return "Dishwasher";
+            }
         }
         if(cell.contains("Banquet Bartender")){
             return "BanquetBartender";
@@ -84,7 +91,7 @@ public class Parser {
         }
 
 
-        return "no match";
+        return "n";
     }
 
 
