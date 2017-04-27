@@ -15,15 +15,19 @@ import java.io.FileInputStream;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.hssf.usermodel.HSSFDateUtil;
+import java.text.SimpleDateFormat;
 
 
 public class SheetCreator {
 
     RowHandler rowHandler;
     Parser parser = new Parser();
+    XSSFRow firstRow;
 
-    public SheetCreator(RowHandler rh){
+    public SheetCreator(RowHandler rh, XSSFRow fr){
         rowHandler = rh;
+        this.firstRow = fr;
     }
 
 
@@ -45,6 +49,11 @@ public class SheetCreator {
 
         ArrayList<ArrayList> all = rowHandler.getAllFiltered();
         int rowNum = 0;
+
+        XSSFRow first = spreadsheet.createRow(rowNum);
+        copyRow(firstRow, first, true);
+        rowNum++;
+
         for(ArrayList<XSSFRow> job: all){
             String jobString = rowHandler.getJobFromList(job);
             XSSFRow jobTitle = spreadsheet.createRow(rowNum);
@@ -84,9 +93,11 @@ public class SheetCreator {
     }
     }
 
-    public void copyRow(XSSFRow r1, XSSFRow r2){
+
+    public void copyRow(XSSFRow r1, XSSFRow r2, boolean flag){
         Iterator<Cell> cellIterator = r1.cellIterator();
         int cellid = 0;
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 
         while (cellIterator.hasNext())
         {
@@ -94,7 +105,12 @@ public class SheetCreator {
             switch (cell.getCellType())
             {
                 case Cell.CELL_TYPE_NUMERIC:
-
+                    if(flag){
+                        Cell r2cellnum = r2.createCell(cellid);
+                        cellid++;
+                        String cellValue = sdf.format(cell.getDateCellValue());
+                        r2cellnum.setCellValue(cellValue);
+                    }
                     break;
                 case Cell.CELL_TYPE_STRING:
                     Cell r2cell = r2.createCell(cellid);
@@ -110,6 +126,7 @@ public class SheetCreator {
         Iterator<Cell> cellIterator = r1.cellIterator();
         int cellid = 0;
         boolean first = true;
+
         while (cellIterator.hasNext())
         {
             Cell cell = cellIterator.next();
@@ -117,8 +134,11 @@ public class SheetCreator {
             switch (cell.getCellType())
             {
                 case Cell.CELL_TYPE_NUMERIC:
-
+                    Cell r2cellnum = r2.createCell(cellid);
+                    cellid++;
+                    r2cellnum.setCellValue(cell.getNumericCellValue());
                     break;
+
                 case Cell.CELL_TYPE_STRING:
                     Cell r2cell = r2.createCell(cellid);
                     cellid++;
@@ -132,12 +152,9 @@ public class SheetCreator {
                     if(!celljob.equals(job)) {
                         System.out.println(job + " " + celljob);
                         System.out.println("!!!!");
-                        if(first){
-                            first = false;
+
                             r2cell.setCellValue("AY");
-                        } else {
-                            r2cell.setCellValue("AY");
-                        }
+
                     }
 
 

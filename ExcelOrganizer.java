@@ -28,7 +28,7 @@ public class ExcelOrganizer
 
         Iterator<Row> rowIterator = spreadsheet.iterator();
         RowHandler rowHandler = new RowHandler();
-        SheetCreator sheetCreator = new SheetCreator(rowHandler);
+        SheetCreator sheetCreator = new SheetCreator(rowHandler, spreadsheet.getRow(0));
 
         while (rowIterator.hasNext())
         {
