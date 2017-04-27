@@ -1,26 +1,49 @@
 /**
  * Created by ralfpopescu on 4/26/17.
  */
-import java.io.*;
-import org.apache.poi.xssf.usermodel.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.Iterator;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ExcelOrganizer
 {
-    public static void main(String args[])throws Exception
+    static XSSFRow row;
+    public static void main(String[] args) throws Exception
     {
-        File file = new File("openworkbook.xlsx");
-        FileInputStream fIP = new FileInputStream(file);
-        //Get the workbook instance for XLSX file
-        XSSFWorkbook workbook = new XSSFWorkbook(fIP);
-        if(file.isFile() && file.exists())
+        FileInputStream fis = new FileInputStream(
+                new File("/Users/ralfpopescu/ParkTavernWhenIWork/src/CDC-1.xlsx"));
+
+        XSSFWorkbook workbook = new XSSFWorkbook(fis);
+        XSSFSheet spreadsheet = workbook.getSheetAt(0);
+
+        Iterator<Row> rowIterator = spreadsheet.iterator();
+
+        while (rowIterator.hasNext())
         {
-            System.out.println(
-                    "openworkbook.xlsx file open successfully.");
+            row = (XSSFRow) rowIterator.next();
+            Iterator<Cell> cellIterator = row.cellIterator();
+            while (cellIterator.hasNext())
+            {
+                Cell cell = cellIterator.next();
+                switch (cell.getCellType())
+                {
+                    case Cell.CELL_TYPE_NUMERIC:
+                        System.out.print(
+                                cell.getNumericCellValue() + " \t\t " );
+                        break;
+                    case Cell.CELL_TYPE_STRING:
+                        System.out.print(
+                                cell.getStringCellValue() + " \t\t " );
+                        break;
+                }
+            }
+            System.out.println();
         }
-        else
-        {
-            System.out.println(
-                    "Error to open openworkbook.xlsx file.");
-        }
+        fis.close();
     }
 }
