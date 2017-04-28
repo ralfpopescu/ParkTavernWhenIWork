@@ -17,6 +17,7 @@ import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import java.text.SimpleDateFormat;
+import org.apache.poi.ss.usermodel.Row.MissingCellPolicy;
 
 
 public class SheetCreator {
@@ -94,7 +95,7 @@ public class SheetCreator {
     }
 
 
-    public void copyRow(XSSFRow r1, XSSFRow r2, boolean flag){
+    public void copyRow(XSSFRow r1, XSSFRow r2, boolean flag){ //flag for date row
         Iterator<Cell> cellIterator = r1.cellIterator();
         int cellid = 0;
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
@@ -126,10 +127,11 @@ public class SheetCreator {
         Iterator<Cell> cellIterator = r1.cellIterator();
         int cellid = 0;
         boolean first = true;
+        int lastColumn = r1.getLastCellNum();
 
-        while (cellIterator.hasNext())
+        while (cellid < lastColumn)
         {
-            Cell cell = cellIterator.next();
+            Cell cell = r1.getCell(cellid, MissingCellPolicy.CREATE_NULL_AS_BLANK);
 
             switch (cell.getCellType())
             {
@@ -142,7 +144,11 @@ public class SheetCreator {
                 case Cell.CELL_TYPE_STRING:
                     Cell r2cell = r2.createCell(cellid);
                     cellid++;
-                    r2cell.setCellValue(cell.getStringCellValue());
+                    if (cell.getStringCellValue() == null){
+                        r2cell.setCellValue(" ");
+                    } else {
+                        r2cell.setCellValue(cell.getStringCellValue());
+                    }
 
                     String celljob = parser.getJob(cell.getStringCellValue());
                     //System.out.println(job + " " + celljob);
@@ -154,12 +160,13 @@ public class SheetCreator {
                         System.out.println("!!!!");
 
                             r2cell.setCellValue("AY");
-
                     }
-
-
-
                     break;
+
+                case Cell.CELL_TYPE_BLANK:
+                    Cell r2cell2= r2.createCell(cellid);
+                    cellid++;
+                    r2cell2.setCellValue(" ");
             }
         }
     }
