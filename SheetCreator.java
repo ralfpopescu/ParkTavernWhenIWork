@@ -25,6 +25,7 @@ public class SheetCreator {
     RowHandler rowHandler;
     Parser parser = new Parser();
     XSSFRow firstRow;
+    CellStyle cellStyle;
 
     public SheetCreator(RowHandler rh, XSSFRow fr){
         rowHandler = rh;
@@ -37,6 +38,8 @@ public class SheetCreator {
         //Create a blank sheet
         XSSFSheet spreadsheet = workbook.createSheet(
                 "Schedule");
+
+
 
         CellCopyPolicy ccp = new CellCopyPolicy();
         ccp.setCondenseRows(true);
@@ -73,6 +76,10 @@ public class SheetCreator {
                 copyRowWithJobFilter(r, row, jobString);
                 rowNum++;
             }
+        }
+
+        for (int i=0; i<30; i++){
+            spreadsheet.autoSizeColumn(i);
         }
 
         //Write the workbook in file system

@@ -85,7 +85,7 @@ public class RowHandler {
             if(job.equals("Host")){
                 Hosts.add(row);
             }
-            if(job.equals("Food Runner")){
+            if(job.equals("FoodRunner")){
                 Foodrunners.add(row);
             }
             if(job.equals("Parking")){
@@ -106,22 +106,22 @@ public class RowHandler {
             if(job.equals("Dishwasher")){
                 Dishwashers.add(row);
             }
-            if(job.equals("Banquet Bartender")){
+            if(job.equals("BanquetBartender")){
                 BanquetBartenders.add(row);
             }
-            if(job.equals("Banquet Cook")){
+            if(job.equals("BanquetCook")){
                 BanquetCooks.add(row);
             }
-            if(job.equals("Banquet Server")){
+            if(job.equals("BanquetServer")){
                 BanquetServers.add(row);
             }
-            if(job.equals("Banquet Dishwasher")){
+            if(job.equals("BanquetDishwasher")){
                 BanquetDishwashers.add(row);
             }
             if(job.equals("Basecamp")){
                 Basecamp.add(row);
             }
-            if(job.equals("Event Sales")){
+            if(job.equals("EventSales")){
                 EventSales.add(row);
             }
             if(job.equals("Inventory")){
